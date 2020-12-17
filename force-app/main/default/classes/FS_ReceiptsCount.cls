@@ -25,9 +25,20 @@ global with sharing class FS_ReceiptsCount extends Framework.Domain{
     private static void updateReceiptsCount(List<OrderApi__Receipt__c> newReceiptRecords) {
         Map<Id, Map<String, Integer>> orderMap = new Map<Id, Map<String, Integer>>();
         
+        List<Id> orderIds = new List<Id>();
         for(OrderApi__Receipt__c receipt : newReceiptRecords) {
+            orderIds.add(receipt.OrderApi__Sales_Order__c);
+        }
+        List<OrderApi__Receipt__c> allReceipts = [
+            SELECT Id, OrderApi__Sales_Order__c, OrderApi__Type__c 
+            FROM OrderApi__Receipt__c 
+            WHERE OrderApi__Sales_Order__c IN: orderIds 
+                AND OrderApi__Type__c IN: new List<String> {'Payment','Refund'} 
+        ];
+
+        for(OrderApi__Receipt__c receipt : allReceipts) {
             Id orderId = receipt.OrderApi__Sales_Order__c;
-            if (!orderMap.keySet().contains(orderId)) {
+            if (!orderMap.containsKey(orderId)) {
                 Map<String, Integer> countMap = new Map<String, Integer>();
                 countMap.put('Payment', 0);
                 countMap.put('Refund', 0);
@@ -57,6 +68,8 @@ global with sharing class FS_ReceiptsCount extends Framework.Domain{
             ordersToUpdate.add(sOrder);
         }
 
-        update ordersToUpdate; // todo add check for null
+        if (ordersToUpdate != null && !ordersToUpdate.isEmpty()) {
+            update ordersToUpdate;
+        }
     }        
 }
