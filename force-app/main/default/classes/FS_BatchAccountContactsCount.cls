@@ -14,11 +14,13 @@ public with sharing class FS_BatchAccountContactsCount implements Database.Batch
     }
 
     public void execute(Database.BatchableContext context, List<Account> accountScope) {
-        for(Account acc : accountScope) {
-            acc.FS_Contact_Count__c = acc.Contacts.size();
-        }
+        if (accountScope != null) {
+            for(Account acc : accountScope) {
+                acc.FS_Contact_Count__c = acc.Contacts.size();
+            }
 
-        update accountScope;
+            update accountScope;
+        }  
     }
 
     public void finish(Database.BatchableContext context) {}
