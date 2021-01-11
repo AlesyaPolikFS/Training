@@ -1,0 +1,24 @@
+<template>
+    <lightning-card>
+        <div class="slds-grid slds-grid--align-center">
+            <img src={successLogo}>            
+        </div>
+        <div class="slds-grid slds-grid--align-center">
+            <h3>THANK YOU!</h3>
+        </div>
+        <div class= "slds-grid slds-grid--align-center">
+            <strong>Payment Successful</strong>
+        </div>
+        <div class= "slds-grid slds-grid--align-center">
+            <strong>Your payment of USD 250$ was successfuly completed</strong>
+        </div>
+        <div style="height: 300px;">
+            <lightning-datatable
+                    key-field="id"
+                    data={data}
+                    columns={columns}
+                    onrowaction={callRowAction}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>        
+</template>
